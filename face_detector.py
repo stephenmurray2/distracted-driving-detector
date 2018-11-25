@@ -2,6 +2,7 @@ from picamera.array import PiRGBArray
 from picamera import PiCamera
 import time
 import cv2
+import csv
 
 imageWidth = 320
 imageHeight = 240
@@ -86,7 +87,7 @@ def continuous_capture():
 
     percent_attentive = str(((1 - (sum(distractions))/(final_time - original_time)))*100)
 
-    
+
 
 
             
