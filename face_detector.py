@@ -87,6 +87,14 @@ def continuous_capture():
 
     percent_attentive = str(((1 - (sum(distractions))/(final_time - original_time)))*100)
 
+    nhood = 'Woburn'
+
+    with open('Danger_mean_by_neighborhood.csv', 'rb') as csvfile:
+        spamreader = csv.reader(csvfile, delimiter=' ', quotechar='|')
+        for row in spamreader:
+            if row[0] == nhood:
+                print(', '.join(row))
+
 
 
 
