@@ -83,6 +83,12 @@ def continuous_capture():
     print(distractions)
     print(final_time - original_time)
     #print(sum(distractions)/len(distractions))
+
+    percent_attentive = str(((1 - (sum(distractions))/(final_time - original_time)))*100)
+
+    
+
+
             
 
 if __name__ == '__main__':
