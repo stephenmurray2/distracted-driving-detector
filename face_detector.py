@@ -3,6 +3,7 @@ from picamera import PiCamera
 import time
 import cv2
 import csv
+import matplotlib.pyplot as plt
 
 imageWidth = 320
 imageHeight = 240
@@ -10,6 +11,9 @@ imageHeight = 240
 n = 5100
 distractedArray = [0]*n
 distractions = []
+
+fontTitle = {'family': 'sans-serif', 'color':'darkblue', 'weight':'bold', 'size':24}
+fontParagraph = {'family': 'sans-serif', 'color':'slateblue', 'weight':'normal', 'size':16}
 
 def continuous_capture():
     original_time = time.time()
@@ -80,25 +84,33 @@ def continuous_capture():
     
     final_time = time.time()
     print(sum(distractions))
-    print("Congratulations! You were attentive for %s%% of the time you were driving!" % str(((1 - (sum(distractions))/(final_time - original_time)))*100))
+    attentive_percentage = ((1 - (sum(distractions))/(final_time - original_time)))*100
+    print("Congratulations! You were attentive for %s%% of the time you were driving!" % attentive_percentage)
     print(distractions)
     print(final_time - original_time)
     #print(sum(distractions)/len(distractions))
 
-    percent_attentive = str(((1 - (sum(distractions))/(final_time - original_time)))*100)
-
     nhood = 'Woburn'
 
-    with open('Danger_mean_by_neighborhood.csv', 'rb') as csvfile:
+    with open('Neighbs_stats_v3.csv', 'rb') as csvfile:
         spamreader = csv.reader(csvfile, delimiter=' ', quotechar='|')
         for row in spamreader:
             if row[0] == nhood:
                 print(', '.join(row))
 
-
-
-
-            
+    fig = plt.figure()
+    #fig.suptitle('FocusTrack', fontdict=fontTitle)
+    frame1 = plt.gca()
+    #frame1.axes.get_xaxis().set_visible(False)
+    #frame1.axes.get_yaxis().set_visible(False)
+    plt.axis('off')
+    plt.text(0.3,1,'FocusTrack', fontdict=fontTitle)
+    plt.text(0,0.9,'You were attentive %d%% percent of the time'%attentive_percentage, fontdict=fontParagraph)
+    plt.text(0,0.8,'Attentive multipliers', fontdict=fontParagraph)
+    plt.text(0.1,0.7,'- School zones: ', fontdict=fontParagraph)
+    plt.text(0.1,0.6,'- Busy intersections: ', fontdict=fontParagraph)
+    plt.text(0,0.3,'Overall score: ' , fontdict=fontParagraph)
+    plt.show()
 
 if __name__ == '__main__':
     continuous_capture()
