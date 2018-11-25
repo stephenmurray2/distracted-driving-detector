@@ -61,6 +61,29 @@ def continuous_capture():
             rawCapture.truncate(0)
             
 
+            #analyze the image to see if they're being distracted
+            time.sleep(0.0001)
+        
+
+            #if distracted, log it
+            if len(profile_faces_left) > 1 | len(profile_faces_right) > 1:
+                start = time.time()
+                distractedArray.append(1)
+            else:
+
+                distractedArray.append(0)
+
+
+            #analyze the past 5 seconds of the array to see how long they've been distracted for
+            # print(sum(distractedArray[-5000:]))
+            if sum(distractedArray[-5000:])/5000 > 0.90:
+                print "Oh no you're distracted"
+            
+            if (distractedArray[-1] == 0) & (distractedArray[-2] == 1):
+                end = time.time()
+                distractions.append(end - start)
+            
+
 if __name__ == '__main__':
     continuous_capture()
 
